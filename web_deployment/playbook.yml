@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 
      - name: Deploy the web application
@@ -8,4 +9,61 @@
          - mysql-db
          - flask-web
 
+=======
+---
+
+- name: Deploy the web application
+  hosts: db_and_web_server1
+  gather_facts: no 
+
+  tasks:
+    -
+      name: Install python dependecies
+      yum: name="{{ item }}" state=installed
+      with_items:
+        - python
+        - python-setuptools
+        - MySQL-python
+        - epel-release
+    
+    -
+      name: Install python pip
+      yum: name=python-pip state=installed
+
+    - 
+      name: Install mysql dependencies
+      yum: name=mariadb-server state=present
+      
+    -
+      name: Start mysql service
+      service: name=mariadb state=started enabled=yes
+
+    - 
+      name: Create a database employee_db
+      mysql_db: name=employee_db state=present 
+
+    - 
+      name: Create a mysql user
+      mysql_user:
+        name: db_user
+        password: Passw0rd
+        priv: '*.*:ALL'
+        state: present
+
+    - 
+      name: Install flask python module
+      pip: name="{{ item }}" state=present 
+      with_items:
+        - flask
+        - flask-mysql
+
+    - 
+      name: Copy app.py file to /opt
+      copy: src=app.py dest=/opt/app.py
+
+    - 
+      name: Run flask application
+      shell: FLASK_APP=/opt/app.py nohup flask run --host=0.0.0.0 &
+
+>>>>>>> edd5ed57006d90f7d46d091aebc08362d3684f7c
     

@@ -1,0 +1,40 @@
+---
+
+- name: deploy ecommerce application
+  hosts: localhost
+  tasks:
+    -
+      name: Install firewalld
+      yum : name=firewalld state=latest
+
+    -
+      name: Start firewalld
+      service: name=firewalld state=started enable=yes
+
+    - 
+      name: Install mariadb server
+      yum: name=mariadb-server state=latest
+
+    - 
+      name: Start mariadb server
+      service: name=mariadb state=started enable=yes
+
+    -
+      name: add mysql port to firewall
+      firewalld:
+        port: 3306/tcp
+        permanent: yes
+        zone: public
+        state: enabled
+
+    -
+      name: Create database ecomdb
+      mysql_db: name=ecomdb state=present
+
+    -
+      name: Create a db user
+      mysql_user:
+        name: ecomuser
+        password: ecompassword
+        priv: '*.*:ALL'
+        state: present

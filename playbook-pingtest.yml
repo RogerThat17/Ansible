@@ -1,0 +1,6 @@
+-
+  name: ping testing the servers
+  hosts: all
+  tasks:
+    - name: ping test
+      ping:
