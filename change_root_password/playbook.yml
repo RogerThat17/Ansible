@@ -1,0 +1,32 @@
+---
+
+- name: Change root password
+  remote_user: root
+  hosts: target1
+  gather_facts: no
+
+  tasks:
+    - 
+      name: Create random password
+      set_fact: 
+        random_number: "{{ 100 | random | to_uuid | upper  }}"
+
+    - 
+      name: Print on the console
+      debug: var=random_number
+
+    - 
+      name: Change root password
+      shell: echo -e "{{ random_number }}" | passwd root --stdin
+
+    -
+      name: Send the password to gmail
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        username: ansibletest17@gmail.com
+        password: robin1729A!
+        to: devadiga ajay <devadigaajay1729@gmail.com>
+        subject: root password has been changed
+        body: "changed root password is {{ random_number }}"
+      delegate_to: localhost

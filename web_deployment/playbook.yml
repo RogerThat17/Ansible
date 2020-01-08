@@ -1,0 +1,11 @@
+---
+
+     - name: Deploy the web application
+       hosts: db_and_web_server1
+       gather_facts: no 
+       roles:
+         - python-dep
+         - mysql-db
+         - flask-web
+
+    

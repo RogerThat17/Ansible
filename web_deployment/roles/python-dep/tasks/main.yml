@@ -1,0 +1,14 @@
+---
+
+    -
+      name: Install python dependecies
+      yum: name="{{ item }}" state=installed
+      with_items:
+        - python
+        - python-setuptools
+        - MySQL-python
+        - epel-release
+    
+    - 
+      name: Install python pip
+      yum: name=python-pip state=installed
